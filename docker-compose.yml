@@ -1,0 +1,10 @@
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    env_file: .env
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_PASSWORD
+      MYSQL_ROOT_DATABASE: $MYSQL_DATABASE
+    ports:
+      - "$MYSQL_PORT:$MYSQL_PORT"

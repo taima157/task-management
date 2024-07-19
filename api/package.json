@@ -1,0 +1,11 @@
+{
+  "name": "task-management-api",
+  "version": "1.0.0",
+  "description": "API do projeto de gerencimento de tarefas",
+  "main": "./src/infra/server.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Taima",
+  "license": "ISC"
+}
