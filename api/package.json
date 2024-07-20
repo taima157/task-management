@@ -4,9 +4,9 @@
   "description": "API do projeto de gerencimento de tarefas",
   "main": "./src/infra/server.ts",
   "scripts": {
-    "dev": "tsx watch --env-file .env ./src/infra/server.ts",
-    "migrate:up": "npx --env-file=.env sequelize-cli db:migrate",
-    "migrate:undo": "npx --env-file=.env sequelize-cli db:migrate:undo"
+    "dev": "npm run migrate:up && tsx watch --env-file .env ./src/infra/server.ts",
+    "migrate:up": "npx sequelize-cli db:migrate",
+    "migrate:undo": "npx sequelize-cli db:migrate:undo"
   },
   "author": "Taima",
   "license": "ISC",
