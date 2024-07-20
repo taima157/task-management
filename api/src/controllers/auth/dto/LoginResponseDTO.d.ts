@@ -1,3 +1,3 @@
-export default class LoginResponseDTO {
+export type LoginResponseDTO = {
   token: string;
 }

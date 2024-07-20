@@ -20,6 +20,9 @@ export default function validationErrorHandler(
     case StatusErrorEnum.UNAUTHORIZED:
       res.status(401).send(new ResponseError(401, err.message));
       break;
+    default:
+      res.status(500).send(new ResponseError(500, err.message));
+      break;
   }
 
   next(err);
