@@ -5,7 +5,7 @@ import connection from "../database/connection";
 const server = http.createServer(app);
 
 server.listen(process.env.API_PORT || 8080, async () => {
-  console.log("Rodando na porta", process.env.API_PORT);
+  console.log(`Rodando na rota http://localhost:${process.env.API_PORT}`);
 
   try {
     await connection.authenticate();

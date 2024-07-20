@@ -1,8 +1,10 @@
 import { Router } from "express";
-import UserRoute from "./UserRoute";
+import UserRoutes from "./UserRoutes";
+import AuthRoutes from "./AuthRoutes";
 
 const RootRoute = Router();
 
-RootRoute.use("/user", UserRoute);
+RootRoute.use("/user", UserRoutes);
+RootRoute.use("/auth", AuthRoutes);
 
 export default RootRoute;
