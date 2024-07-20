@@ -28,7 +28,11 @@ User.init(
       allowNull: false,
     },
   },
-  { sequelize: connection, underscored: true, modelName: "user" }
+  {
+    sequelize: connection,
+    underscored: true,
+    tableName: "user",
+  }
 );
 
 export default User;
