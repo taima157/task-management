@@ -8,40 +8,48 @@ import {
 import connection from "../database/connection";
 import Task from "./Task";
 
-class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
-  declare idUser: CreationOptional<string>;
-  declare firstName: string;
-  declare lastName: string;
-  declare email: string;
-  declare password: string;
+class SubTask extends Model<
+  InferAttributes<SubTask>,
+  InferCreationAttributes<SubTask>
+> {
+  declare idSubTask: CreationOptional<string>;
+  declare title: string;
+  declare description: string;
+  declare completed: boolean;
+  declare idTask: CreationOptional<string>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
 
-User.init(
+SubTask.init(
   {
-    idUser: {
+    idSubTask: {
       type: DataTypes.UUIDV4,
       primaryKey: true,
       unique: true,
       allowNull: false,
       defaultValue: DataTypes.UUIDV4,
     },
-    firstName: {
+    title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    lastName: {
+    description: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    email: {
-      type: DataTypes.STRING,
+    completed: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
     },
-    password: {
-      type: DataTypes.STRING,
+    idTask: {
+      type: DataTypes.UUIDV4,
       allowNull: false,
+      references: {
+        model: Task,
+        key: "id_task",
+      },
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
@@ -49,10 +57,8 @@ User.init(
   {
     sequelize: connection,
     underscored: true,
-    tableName: "user",
+    tableName: "sub_task",
   }
 );
 
-User.hasMany(Task, { foreignKey: "idUser", as: "tasks" });
-
-export default User;
+export default SubTask;

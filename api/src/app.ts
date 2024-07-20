@@ -1,7 +1,6 @@
 import express from "express";
 import RootRoute from "./routes";
-import ValidationErrorHandler from "./infra/middlewares/validationErrorHandler";
-
+import ValidationErrorHandler from "./infra/middlewares/ValidationErrorHandler";
 
 const app = express();
 
