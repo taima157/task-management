@@ -40,7 +40,7 @@ export default class TaskService {
     updateTaskRequestDTO: UpdateTaskRequestDTO
   ) {
     const task = await this.findById(idTask);
-    task.update(updateTaskRequestDTO);
+    await task.update(updateTaskRequestDTO);
 
     const dbSubTasks = await task.getSubTasks();
     await SubTaskService.updateSubTasks(
@@ -48,7 +48,7 @@ export default class TaskService {
       dbSubTasks
     );
 
-    await task.reload();
+    await task.reload({ include: { model: SubTask, as: "subTasks" } });
 
     return task;
   }

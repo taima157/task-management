@@ -19,60 +19,52 @@ export default class SubTaskService {
   }
 
   static async update(updateSubTaskRequestDTO: UpdateSubTaskRequestDTO) {
-    const subTask = await this.findById(updateSubTaskRequestDTO.idSubTask);
-    await subTask.update(updateSubTaskRequestDTO);
+    await SubTask.update(updateSubTaskRequestDTO, {
+      where: { idSubTask: updateSubTaskRequestDTO.idSubTask },
+    });
   }
 
   static async delete(updateSubTaskRequestDTO: UpdateSubTaskRequestDTO) {
-    const subTask = await this.findById(updateSubTaskRequestDTO.idSubTask);
-    await subTask.destroy();
+    await (await this.findById(updateSubTaskRequestDTO.idSubTask)).destroy();
   }
 
   static async updateSubTasks(
     bodySubTasks: Array<UpdateSubTaskRequestDTO>,
     dbSubTasks: Array<UpdateSubTaskRequestDTO>
   ) {
-    const subTaskIds = [];
-    const subTasksToDelete = [];
-    const subTasksToAdd = [];
-    const subTasksToUpdate = [];
+    const dbSubTasksMap = new Map(
+      dbSubTasks.map((subTask) => [subTask.idSubTask, subTask])
+    );
 
-    bodySubTasks.forEach((subTask) => {
-      if (subTask.idSubTask) {
-        subTaskIds.push(subTask.idSubTask);
+    const { subTasksToAdd, subTasksToUpdate, subTaskIds } = bodySubTasks.reduce(
+      (acc, subTask) => {
+        if (subTask.idSubTask) {
+          acc.subTaskIds.add(subTask.idSubTask);
 
-        dbSubTasks.forEach((subTaskDb) => {
-          if (subTaskDb.idSubTask === subTask.idSubTask) {
-            subTasksToUpdate.push(subTask);
+          if (dbSubTasksMap.has(subTask.idSubTask)) {
+            acc.subTasksToUpdate.push(subTask);
           }
-        });
+        } else {
+          acc.subTasksToAdd.push(subTask);
+        }
 
-        return;
+        return acc;
+      },
+      {
+        subTasksToAdd: [],
+        subTasksToUpdate: [],
+        subTaskIds: new Set(),
       }
+    );
 
-      subTasksToAdd.push(subTask);
-    });
+    const subTasksToDelete = dbSubTasks.filter(
+      (subTask) => !subTaskIds.has(subTask.idSubTask)
+    );
 
-    dbSubTasks.forEach((subTask) => {
-      if (!subTaskIds.includes(subTask.idSubTask)) {
-        subTasksToDelete.push(subTask);
-      }
-    });
-
-    const allPromises = [];
-
-    subTasksToDelete.forEach((subTask) => {
-      allPromises.push(this.delete(subTask));
-    });
-
-    subTasksToAdd.forEach(async (subTask) => {
-      allPromises.push(this.create(subTask));
-    });
-
-    subTasksToUpdate.forEach(async (subTask) => {
-      allPromises.push(this.update(subTask));
-    });
-
-    await Promise.all(allPromises);
+    await Promise.all([
+      ...subTasksToDelete.map((subTask) => this.delete(subTask)),
+      ...subTasksToAdd.map((subTask) => this.create(subTask)),
+      ...subTasksToUpdate.map((subTask) => this.update(subTask)),
+    ]);
   }
 }
