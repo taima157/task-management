@@ -4,9 +4,9 @@ import StatusError, {
   StatusErrorEnum,
 } from "../../utils/errors/StatusError";
 
-export default function validationErrorHandler(
+export default function ValidationErrorHandler(
   err: StatusError,
-  req: Request,
+  _: Request,
   res: Response,
   next: NextFunction
 ) {

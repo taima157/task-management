@@ -1,6 +1,7 @@
 import express from "express";
 import RootRoute from "./routes";
-import validationErrorHandler from "./infra/middlewares/validationErrorHandler";
+import ValidationErrorHandler from "./infra/middlewares/validationErrorHandler";
+
 
 const app = express();
 
@@ -11,6 +12,6 @@ app.get("/", (_, res) => {
 });
 
 app.use("/api", RootRoute);
-app.use(validationErrorHandler);
+app.use(ValidationErrorHandler);
 
 export default app;
